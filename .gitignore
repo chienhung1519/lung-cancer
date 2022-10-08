@@ -1,0 +1,6 @@
+*.json
+*.yaml
+*.nemo
+*.pt
+*.bin
+*.txt
