@@ -1,0 +1,16 @@
+ALK
+EGFR_18
+EGFR_19
+EGFR_20
+EGFR_21
+Htype
+LV_invasion
+PDL1_immune
+ROS1
+diagnosis
+operation
+organ
+CK7
+TTF-1
+CK20
+P40
