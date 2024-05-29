@@ -1,0 +1,82 @@
+{
+    "NonImmu": {
+      "B-ALK": 0,
+      "B-Bx-site": 1,
+      "B-EGFR_18": 2,
+      "B-EGFR_19": 3,
+      "B-EGFR_20": 4,
+      "B-EGFR_21": 5,
+      "B-Greatest dimension": 6,
+      "B-Hgrade": 7,
+      "B-Htype": 8,
+      "B-LV_invasion": 9,
+      "B-PDL1_CPS": 10,
+      "B-PDL1_IC": 11,
+      "B-PDL1_TC": 12,
+      "B-PDL1_TPS": 13,
+      "B-PDL1_immune": 14,
+      "B-ROS1": 15,
+      "B-VPI": 16,
+      "B-closest_margin": 17,
+      "B-diagnosis": 18,
+      "B-ki-67": 19,
+      "B-operation": 20,
+      "B-organ": 21,
+      "B-pM": 22,
+      "B-pN": 23,
+      "B-pT": 24,
+      "B-tumor_size": 25,
+      "I-ALK": 26,
+      "I-Bx-site": 27,
+      "I-EGFR_18": 28,
+      "I-EGFR_19": 29,
+      "I-EGFR_20": 30,
+      "I-EGFR_21": 31,
+      "I-Greatest dimension": 32,
+      "I-Hgrade": 33,
+      "I-Htype": 34,
+      "I-LV_invasion": 35,
+      "I-PDL1_CPS": 36,
+      "I-PDL1_IC": 37,
+      "I-PDL1_TC": 38,
+      "I-PDL1_TPS": 39,
+      "I-PDL1_immune": 40,
+      "I-ROS1": 41,
+      "I-VPI": 42,
+      "I-closest_margin": 43,
+      "I-diagnosis": 44,
+      "I-ki-67": 45,
+      "I-operation": 46,
+      "I-organ": 47,
+      "I-pM": 48,
+      "I-pN": 49,
+      "I-pT": 50,
+      "I-tumor_size": 51,
+      "O": 52
+    },
+    "CK7": {
+      "B-CK7": 0,
+      "I-CK7": 1,
+      "O": 2
+    },
+    "TTF-1": {
+      "B-TTF-1": 0,
+      "I-TTF-1": 1,
+      "O": 2
+    },
+    "Napsin-A": {
+      "B-Napsin-A": 0,
+      "I-Napsin-A": 1,
+      "O": 2
+    },
+    "CK20": {
+      "B-CK20": 0,
+      "I-CK20": 1,
+      "O": 2
+    },
+    "P40": {
+      "B-P40": 0,
+      "I-P40": 1,
+      "O": 2
+    }
+  }
