@@ -2,9 +2,8 @@ from argparse import ArgumentParser, Namespace
 import pandas as pd
 import time
 import jsonlines
-from typing import List, Dict
+from pathlib import Path
 
-from sklearn.model_selection import train_test_split
 from simpletransformers.t5 import T5Model, T5Args
 from transformers import AutoTokenizer
 import transformers
@@ -27,7 +26,7 @@ def parse_args() -> Namespace:
     args = parser.parse_args()
     return args
 
-def load_data(data_path: str) -> List[Dict]:
+def load_data(data_path: str) -> list[dict]:
     with jsonlines.open(data_path) as reader:
         data = [obj for obj in reader]
     return data
@@ -39,9 +38,6 @@ def dict_to_dataframe(data):
 def main():
     start = time.time()
     args = parse_args()
-
-    args.model_name_or_path = args.output_dir
-    args.from_flax = False
 
     # Load data
     train_data = load_data(args.train_file)
@@ -72,16 +68,14 @@ def main():
     model_args.fp16 = False
     model_args.use_multiprocessed_decoding = False
 
-    model_args.output_dir = args.output_dir
-    model_args.best_model_dir = f"{args.output_dir}/best_model"
+    model_args.output_dir = f"{args.output_dir}/sft"
+    model_args.best_model_dir = f"{args.output_dir}/sft/best_model"
     model_args.save_best_model = True
     model_args.save_eval_checkpoints = False
     model_args.save_model_every_epoch = False
     model_args.save_optimizer_and_scheduler = False
     model_args.save_steps = -1
 
-    # model_args.report_to="none"
-    model_args.tensorboard_dir = "/nfs/nas-7.1/chchen/lung-cancer/runs"
     model_args.no_cache = True
     model_args.wandb_project = "lung-cancer"
     model_args.wandb_kwargs = {"name": args.model_name_or_path}
@@ -109,16 +103,19 @@ def main():
     )
 
     # Train the model
-    # model.train_model(train_data, use_cuda=True)
+    model.train_model(train_data, use_cuda=True)
 
     # Make predictions with the model
+    output_dir = f"{args.output_dir}/predict"
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
+
     test_preds = model.predict(test_to_predict)
     test_data["prediction"] = test_preds
-    test_data.to_json(f"{args.output_dir}/test_outputs.jsonl", force_ascii=False, orient='records', lines=True)
+    test_data.to_json(f"{output_dir}/generated_predictions.jsonl", force_ascii=False, orient='records', lines=True)
 
     ntu_preds = model.predict(ntu_to_predict)
     ntu_data["prediction"] = ntu_preds
-    ntu_data.to_json(f"{args.output_dir}/ntu_outputs.jsonl", force_ascii=False, orient='records', lines=True)
+    ntu_data.to_json(f"{output_dir}/generated_predictions.jsonl", force_ascii=False, orient='records', lines=True)
 
     end = time.time()
     print(f"{end-start} seconds.")
