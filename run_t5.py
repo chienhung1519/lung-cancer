@@ -40,6 +40,9 @@ def main():
     start = time.time()
     args = parse_args()
 
+    args.model_name_or_path = args.output_dir
+    args.from_flax = False
+
     # Load data
     train_data = load_data(args.train_file)
     test_data = load_data(args.test_file)
@@ -106,16 +109,16 @@ def main():
     )
 
     # Train the model
-    model.train_model(train_data, use_cuda=True)
+    # model.train_model(train_data, use_cuda=True)
 
     # Make predictions with the model
     test_preds = model.predict(test_to_predict)
     test_data["prediction"] = test_preds
-    test_data.to_json(f"{args.output_dir}/test_outputs.json", force_ascii=False, orient='records', lines=True)
+    test_data.to_json(f"{args.output_dir}/test_outputs.jsonl", force_ascii=False, orient='records', lines=True)
 
     ntu_preds = model.predict(ntu_to_predict)
     ntu_data["prediction"] = ntu_preds
-    ntu_data.to_json(f"{args.output_dir}/ntu_outputs.json", force_ascii=False, orient='records', lines=True)
+    ntu_data.to_json(f"{args.output_dir}/ntu_outputs.jsonl", force_ascii=False, orient='records', lines=True)
 
     end = time.time()
     print(f"{end-start} seconds.")

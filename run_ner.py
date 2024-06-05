@@ -19,8 +19,15 @@ import evaluate
 import wandb
 
 
-# TARGETS = ["NonImmu", "CK7", "TTF-1", "CK20", "P40"]
-TARGETS = ["CK20", "P40"]
+TARGETS = ["NonImmu", "CK7", "TTF-1", "CK20", "P40"]
+
+chpt_dir = {
+    "NonImmu": "outputs/gatortron-base/NonImmu/checkpoint-9444",
+    "CK7": "outputs/gatortron-base/CK7/checkpoint-28332",
+    "TTF-1": "outputs/gatortron-base/TTF-1/checkpoint-3148",
+    "CK20": "outputs/gatortron-base/CK20/checkpoint-3148",
+    "P40": "outputs/gatortron-base/P40/checkpoint-25184",
+}
 
 def parse_args() -> Namespace:
     parser = ArgumentParser()
@@ -73,6 +80,8 @@ def main():
     mappings = json.loads(Path(args.mapping_file).read_text())
 
     for target in TARGETS:
+
+        args.model_name_or_path = chpt_dir[target]
 
         datasets = DatasetDict({
             "train": Dataset.from_list(train_data),
@@ -196,7 +205,7 @@ def main():
         early_sttoping_callback = EarlyStoppingCallback(early_stopping_patience=args.early_stopping_patience)
 
         # Wandb
-        wandb.init(project="lung-cancer", name=f"{args.model_name_or_path}-{target}")
+        # wandb.init(project="lung-cancer", name=f"{args.model_name_or_path}-{target}")
 
         # Trainer
         trainer = Trainer(
@@ -211,23 +220,23 @@ def main():
         )
 
         # Train
-        trainer.train()
+        # trainer.train()
 
         # Stop wandb
-        wandb.finish()
+        # wandb.finish()
 
         # Inference test data
-        predictions = trainer.predict(datasets["test"])
-        preds = predictions.predictions.argmax(axis=-1)
-        labels = predictions.label_ids
+        # predictions = trainer.predict(datasets["test"])
+        # preds = predictions.predictions.argmax(axis=-1)
+        # labels = predictions.label_ids
 
-        true_preds = [
-            [label_list[p] for (p, l) in zip(pred, label) if l != -100]
-            for pred, label in zip(preds, labels)
-        ]
+        # true_preds = [
+        #     [label_list[p] for (p, l) in zip(pred, label) if l != -100]
+        #     for pred, label in zip(preds, labels)
+        # ]
 
-        for example, pred in zip(test_data, true_preds):
-            example[f"{target}_pred"] = pred
+        # for example, pred in zip(test_data, true_preds):
+        #     example[f"{target}_pred"] = pred
 
         # Inference ntu data
         predictions = trainer.predict(datasets["ntu"])
@@ -245,7 +254,7 @@ def main():
         # Delete model
         del model
 
-    save_jsonl(Path(args.output_dir, "test_outputs.jsonl"), test_data)
+    # save_jsonl(Path(args.output_dir, "test_outputs.jsonl"), test_data)
     save_jsonl(Path(args.output_dir, "ntu_outputs.jsonl"), ntu_data)
 
 if __name__ == "__main__":
