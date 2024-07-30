@@ -32,7 +32,12 @@ def load_from_jsonl(file_name: str) -> list[dict]:
 
 def extract_llama_labels_and_predictions(results: list[dict]) -> tuple[list[dict], list[dict]]:
     labels = [json.loads(result["label"]) for result in results]
-    predictions = [json.loads(result["predict"]) for result in results]
+    predictions = []
+    for result in results:
+        try:
+            predictions.append(json.loads(result["predict"]))
+        except:
+            predictions.append({t: "unknown" for t in TARGETS})
     return labels, predictions
 
 
